@@ -170,4 +170,4 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 
-GOOGLE_API_KEY = "AIzaSyCA1bXBH-l-pw4TQd3mtdDaMSCs2_vzLJI"
+

@@ -1,0 +1,139 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head>     
+    <meta charset="UTF-8">     
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">     
+    <title>AI Chatbot</title>     
+    <script src="https://cdn.tailwindcss.com"></script>     
+    <style>         
+        body {             
+            background-color: black;             
+            color: white;         
+            font-family: 'Poppins', sans-serif;
+        }         
+        .chat-container {             
+        width: 1000px;             
+        margin: auto;             
+        background: linear-gradient(135deg, #000000, #1a1a1a);             
+        padding: 25px;             
+        border-radius: 12px;             
+        border: 1px solid rgb(245, 41, 75); /* गहरा बॉर्डर */
+        box-shadow: 
+        0px 0px 15px rgba(255, 94, 98, 0.8), /* Outer glow */
+        0px 0px 30px rgba(255, 0, 0, 0.5) inset; /* Inner glow */
+    }
+            
+        .chat-box {             
+            height: 60vh;             
+            overflow-y: auto;             
+            border: 1px solid grey;             
+            padding: 15px;             
+            border-radius: 10px;             
+            background: rgba(0, 0, 0, 0.85);         
+        }         
+        .message {             
+            display: inline-block;             
+            max-width: 80%;             
+            word-wrap: break-word;             
+            padding: 12px;             
+            border-radius: 10px;             
+            font-size: 1rem;         
+        }         
+        .user-message {             
+            background: linear-gradient(45deg, rgb(255, 94, 98), rgb(245, 41, 75)); 
+            box-shadow: 0px 4px 10px rgba(255, 94, 98, 0.5);
+            transition: all 0.3s ease-in-out;            
+            color: white;             
+            text-align: right;             
+            align-self: flex-end;         
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }         
+        .bot-message {             
+            background: rgba(75, 85, 99, 0.9);             
+            color: white;             
+            text-align: left;             
+            align-self: flex-start;         
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }         
+        .input-container {             
+            display: flex;             
+            margin-top: 15px;         
+        }         
+        .input-container input {             
+            flex: 1;             
+            padding: 10px;             
+            border: none;             
+            border-radius: 8px;             
+            background: rgba(255, 255, 255, 0.1);             
+            color: white;             
+            outline: none;
+        }         
+        .input-container button {             
+            background: linear-gradient(45deg, rgb(255, 94, 98), rgb(245, 41, 75)); 
+            box-shadow: 0px 4px 10px rgba(255, 94, 98, 0.5);
+            transition: all 0.3s ease-in-out;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-left: 10px;
+        }         
+        .input-container button:hover {             
+            background: linear-gradient(45deg, rgb(245, 41, 75), rgb(255, 94, 98)); 
+            transform: scale(1.05);
+            box-shadow: 0px 6px 15px rgba(255, 94, 98, 0.7);
+        } 
+        
+        img {
+    width: 100px; /* Adjust size */
+    height: 100px;
+    margin-top: 0; /* Remove extra margin */
+}
+
+
+    </style> 
+</head> 
+<body>     
+    <div class="flex justify-center items-center h-screen flex-col">         
+        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png" 
+        alt="AI Robot" 
+        class="w-24 h-24 mb-2"> 
+   <h2 class="text-2xl font-bold text-center">AI Chatbot</h2> 
+        <div class="chat-container">             
+            <div id="chat-box" class="chat-box flex flex-col"></div>             
+            <div class="input-container">                 
+                <input type="text" id="user-input" placeholder="Type a message...">                 
+                <button onclick="sendMessage()">Send</button>             
+            </div>         
+        </div>     
+    </div>          
+    <script>         
+        function sendMessage() {             
+            let userInput = document.getElementById("user-input").value;             
+            if (!userInput) return;              
+            let chatBox = document.getElementById("chat-box");             
+            let userMessage = document.createElement("div");             
+            userMessage.className = "message user-message self-end my-2";             
+            userMessage.innerText = userInput;             
+            chatBox.appendChild(userMessage);              
+            document.getElementById("user-input").value = "";             
+            chatBox.scrollTop = chatBox.scrollHeight;              
+            fetch("/chatbot-response/", {                 
+                method: "POST",                 
+                headers: { "Content-Type": "application/json" },                 
+                body: JSON.stringify({ message: userInput })             
+            })             
+            .then(response => response.json())             
+            .then(data => {                 
+                let botMessage = document.createElement("div");                 
+                botMessage.className = "message bot-message self-start my-2";                 
+                botMessage.innerText = data.response;                 
+                chatBox.appendChild(botMessage);                 
+                chatBox.scrollTop = chatBox.scrollHeight;             
+            })             
+            .catch(error => console.error("Error:", error));         
+        }     
+    </script> 
+</body> 
+</html>

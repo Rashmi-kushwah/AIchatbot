@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Real-Time Chat</title>
+</head>
+<body>
+    <h2>Chat Room</h2>
+    <div id="chatBox" style="border: 1px solid black; width: 400px; height: 300px; overflow-y: scroll;"></div>
+    
+    <input type="text" id="username" placeholder="Enter your name">
+    <input type="text" id="message" placeholder="Type a message">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        const chatBox = document.getElementById("chatBox");
+        const usernameInput = document.getElementById("username");
+        const messageInput = document.getElementById("message");
+
+        const socket = new WebSocket("ws://" + window.location.host + "/ws/chat/");
+
+
+        socket.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            chatBox.innerHTML += `<p><b>${data.username}:</b> ${data.message}</p>`;
+        };
+
+        function sendMessage() {
+            const message = messageInput.value;
+            const username = usernameInput.value || "Anonymous";
+
+            socket.send(JSON.stringify({
+                "username": username,
+                "message": message
+            }));
+
+            messageInput.value = "";
+        }
+    </script>
+</body>
+</html>

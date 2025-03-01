@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'chatbot',  # Apni app ko register karein
     "channels",  # Add this
+    'rest_framework',
 
 ]
 

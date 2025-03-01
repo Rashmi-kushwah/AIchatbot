@@ -14,7 +14,7 @@ co = cohere.Client(COHERE_API_KEY)
 
 # Chat Page Render Karega
 def chatbot_page(request):
-    return render(request, "chat.html")
+    return render(request, "index.html")
 
 # CSRF Token Generate Karega
 def get_csrf_token(request):
